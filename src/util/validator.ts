@@ -34,6 +34,10 @@ export const isPropertyOf = (prop: string, type: any) => {
 
 }
 
+export function isEmptyObject(obj: any){
+    return obj && Object.keys(obj).length === 0;
+}
+
 export default {
     isValidId,
     isValidStrings,

@@ -2,6 +2,7 @@ import url from 'url';
 import express from 'express';
 import { User } from '../models/user';
 import AppConfig from '../config/app';
+import { isEmptyObject } from '../util/validator';
 
 export const UserRouter = express.Router();
 
@@ -12,7 +13,7 @@ UserRouter.get('', async (req, resp) => {
 
         let reqURL = url.parse(req.url, true);
 
-        if(Object.keys(reqURL.query).length !== 0) {
+        if(!isEmptyObject(reqURL.query)) {
             let payload = await userService.getUserByUniqueKey({...reqURL.query});;
             return resp.status(200).json(payload);
         } else {

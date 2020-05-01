@@ -1,6 +1,6 @@
 import { User } from "../models/user";
 import { UserRepository } from "../repos/user-repo";
-import { isValidId, isValidStrings, isValidObject, isPropertyOf } from "../util/validator";
+import { isValidId, isValidStrings, isValidObject, isPropertyOf, isEmptyObject } from "../util/validator";
 import { BadRequestError, ResourceNotFoundError, NotImplementedError, ResourcePersistenceError, AuthenticationError } from "../errors/errors";
 import { query } from "express";
 
@@ -10,25 +10,16 @@ export class UserService {
         this.userRepo = userRepo;
     }
 
-    getAllUsers(): Promise<User[]> {
+    async getAllUsers(): Promise<User[]> {
 
-        return new Promise<User[]>(async (resolve, reject) => {
-
-            let users: User[] = [];
-            let result = await this.userRepo.getAll();
-
-            for (let user of result) {
-                users.push({...user});
-            }
+            let users = await this.userRepo.getAll();
 
             if (users.length == 0) {
-                reject(new ResourceNotFoundError());
-                return;
+                throw new ResourceNotFoundError();
             }
 
-            resolve(users.map(this.removePassword));
+            return users.map(this.removePassword);
 
-        });
 
     }
 
@@ -82,7 +73,7 @@ export class UserService {
 
                 let user = {...await this.userRepo.getUserByUniqueKey(key, val)};
 
-                if (Object.keys(user).length === 0) {
+                if (isEmptyObject(user)) {
                     return reject(new ResourceNotFoundError());
                 }
 
