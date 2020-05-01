@@ -23,38 +23,29 @@ export class UserService {
 
     }
 
-    getUserById(id: number): Promise<User> {
-
-        return new Promise<User>(async (resolve, reject) => {
+    async getUserById(id: number): Promise<User> {
 
             if (!isValidId(id)) {
-                return reject(new BadRequestError());
+                throw new BadRequestError();
             }
 
             let user = {...await this.userRepo.getById(id)};
 
             if(Object.keys(user).length === 0) {
-                reject(new ResourceNotFoundError());
-                return;
+                throw new ResourceNotFoundError();
             }
 
-            resolve(this.removePassword(user));
+            return this.removePassword(user);
 
-        });
 
     }
 
-    getUserByUniqueKey(queryObj: any): Promise<User> {
-
-        return new Promise<User>(async (resolve, reject) => {
-
-            // we need to wrap this up in a try/catch in case errors are thrown for our awaits
-            try {
+    async getUserByUniqueKey(queryObj: any): Promise<User> {
 
                 let queryKeys = Object.keys(queryObj);
 
                 if(!queryKeys.every(key => isPropertyOf(key, User))) {
-                    return reject(new BadRequestError());
+                    throw new BadRequestError();
                 }
 
                 // we will only support single param searches (for now)
@@ -63,80 +54,68 @@ export class UserService {
 
                 // if they are searching for a user by id, reuse the logic we already have
                 if (key === 'id') {
-                    return resolve(await this.getUserById(+val));
+                    throw await this.getUserById(+val);
                 }
 
                 // ensure that the provided key value is valid
                 if(!isValidStrings(val)) {
-                    return reject(new BadRequestError());
+                    throw new BadRequestError();
                 }
 
                 let user = {...await this.userRepo.getUserByUniqueKey(key, val)};
 
                 if (isEmptyObject(user)) {
-                    return reject(new ResourceNotFoundError());
+                    throw new ResourceNotFoundError();
                 }
 
-                resolve(this.removePassword(user));
+                return this.removePassword(user);
 
-            } catch (e) {
-                reject(e);
-            }
 
-        });
     }
 
-    authenticateUser(un: string, pw: string): Promise<User> {
+    async authenticateUser(un: string, pw: string): Promise<User> {
 
-        return new Promise<User>(async (resolve, reject) => {
 
             if (!isValidStrings(un, pw)) {
-                reject(new BadRequestError());
-                return;
+                throw new BadRequestError();
             }
 
             let authUser: User;
+            
             try {
                 authUser = await this.userRepo.getUserByCredentials(un, pw);
             } catch (e) {
-                reject(e);
+                throw e;
             }
 
             if (Object.keys(authUser).length === 0) {
-                reject(new AuthenticationError('Bad credentials provided.'));
-                return;
+                throw new AuthenticationError('Bad credentials provided.');
             }
 
-            resolve(this.removePassword(authUser));
+            return this.removePassword(authUser);
 
-        });
 
     }
 
-    addNewUser(newUser: User): Promise<User> {
+    async addNewUser(newUser: User): Promise<User> {
         
-        return new Promise<User>(async (resolve, reject) => {
 
             if (!isValidObject(newUser, 'id')) {
-                reject(new BadRequestError('Invalid property values found in provided user.'));
-                return;
+                throw new BadRequestError('Invalid property values found in provided user.');
             }
 
             let conflict = this.getUserByUniqueKey({username: newUser.username});
         
             if (conflict) {
-                reject(new ResourcePersistenceError('The provided username is already taken.'));
-                return;
+                throw new ResourcePersistenceError('The provided username is already taken.');
             }
 
             try {
                 const persistedUser = await this.userRepo.save(newUser);
-                resolve(this.removePassword(persistedUser));
+                return this.removePassword(persistedUser);
             } catch (e) {
-                reject(e);
+                throw e;
             }
-
-        });
 
     }
 
