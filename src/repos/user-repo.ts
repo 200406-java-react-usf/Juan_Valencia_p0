@@ -11,17 +11,12 @@ export class UserRepository implements CrudRepository<User> {
 
     baseQuery = `
     select
-        au.id, 
+        au.user_id, 
         au.username, 
         au.password, 
-        au.first_name,
-        au.last_name,
-        au.email,
-        ur.name as role_name
-    from app_users au
-    join user_roles ur
-    on au.role_id = ur.id
-`;
+        au.account_name
+    from app_users au 
+    `;
 
     async getAll(): Promise<User[]> {
 
@@ -46,7 +41,7 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `${this.baseQuery} where au.id = $1`;
+            let sql = `${this.baseQuery} where au.id = $1 ;`;
             let rs = await client.query(sql, [id]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
@@ -64,7 +59,7 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `${this.baseQuery} where au.${key} = $1`;
+            let sql = `${this.baseQuery} where au.${key} = $1 ;`;
             let rs = await client.query(sql, [val]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
@@ -82,7 +77,7 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `${this.baseQuery} where au.username = $1 and au.password = $2`;
+            let sql = `${this.baseQuery} where au.username = $1 and au.password = $2 ;`;
             let rs = await client.query(sql, [un, pw]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
@@ -104,7 +99,7 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `insert into app_users (username, password, account_name) values ( $1 , $2 , $3 )`;
+            let sql = `insert into app_users (username, password, account_name) values ( $1 , $2 , $3 ) ;`;
             let rs = await client.query(sql, [newUser.username ,newUser.password , newUser.accountName]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
