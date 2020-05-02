@@ -8,6 +8,7 @@ import { Pool } from 'pg';
 import { sessionMiddleware } from './middleware/session-middleware';
 import { corsFilter } from './middleware/cors-filter';
 import { AuthRouter } from './routers/auth-router';
+import { CharRouter } from './routers/external-api-router';
 
 // environment configuration
 dotenv.config();
@@ -35,6 +36,7 @@ app.use(corsFilter);
 app.use('/', express.json());
 app.use('/users', UserRouter);
 app.use('/auth', AuthRouter);
+app.use('/characters', CharRouter);
 //app.use('/stats', StatsRouter);
 
 app.listen(8080, () => {
