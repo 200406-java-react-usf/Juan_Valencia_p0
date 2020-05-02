@@ -3,12 +3,13 @@ import express from 'express';
 import { User } from '../models/user';
 import AppConfig from '../config/app';
 import { isEmptyObject } from '../util/validator';
+import { adminGuard } from '../middleware/auth-middleware';
 
 export const UserRouter = express.Router();
 
 const userService = AppConfig.userService;
 
-UserRouter.get('', async (req, resp) => {
+UserRouter.get('', adminGuard, async (req, resp) => {
     try {
 
         let reqURL = url.parse(req.url, true);

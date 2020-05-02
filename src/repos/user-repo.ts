@@ -59,6 +59,7 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
+            
             let sql = `${this.baseQuery} where au.${key} = $1 ;`;
             let rs = await client.query(sql, [val]);
             return mapUserResultSet(rs.rows[0]);
@@ -100,7 +101,7 @@ export class UserRepository implements CrudRepository<User> {
         try {
             client = await connectionPool.connect();
             let sql = `insert into app_users (username, password, account_name) values ( $1 , $2 , $3 ) ;`;
-            let rs = await client.query(sql, [newUser.username ,newUser.password , newUser.accountName]);
+            let rs = await client.query(sql, [newUser.username ,newUser.password , newUser.account_name]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
             throw new InternalServerError();

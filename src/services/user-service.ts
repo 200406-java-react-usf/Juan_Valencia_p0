@@ -29,7 +29,7 @@ export class UserService {
                 throw new BadRequestError();
             }
 
-            let user = {...await this.userRepo.getById(id)};
+            let user = await this.userRepo.getById(id);
 
             if(Object.keys(user).length === 0) {
                 throw new ResourceNotFoundError();
@@ -62,8 +62,7 @@ export class UserService {
                     throw new BadRequestError();
                 }
 
-                let user = {...await this.userRepo.getUserByUniqueKey(key, val)};
-
+                let user = await this.userRepo.getUserByUniqueKey(key, val);
                 if (isEmptyObject(user)) {
                     throw new ResourceNotFoundError();
                 }
@@ -99,23 +98,25 @@ export class UserService {
 
     async addNewUser(newUser: User): Promise<User> {
         
-
             if (!isValidObject(newUser, 'id')) {
                 throw new BadRequestError('Invalid property values found in provided user.');
             }
 
-            let conflict = this.getUserByUniqueKey({username: newUser.username});
-        
-            if (conflict) {
+            let usernameAvailable = await this.isUsernameAvailable(newUser.username);
+            
+            if (!usernameAvailable) {
                 throw new ResourcePersistenceError('The provided username is already taken.');
             }
 
-            try {
+            let accountnameAvailable = await this.isAccountAvailable(newUser.account_name);
+
+            if(!accountnameAvailable) {
+                throw new ResourcePersistenceError('The provided account name is already taken.');
+            }
+
                 const persistedUser = await this.userRepo.save(newUser);
                 return this.removePassword(persistedUser);
-            } catch (e) {
-                throw e;
-            }
+            
 
     }
 
@@ -144,6 +145,34 @@ export class UserService {
         return new Promise<boolean>(async (resolve, reject) => {
             reject(new NotImplementedError());
         });
+
+    }
+
+    private async isUsernameAvailable(username: string): Promise<boolean> {
+
+        try {
+            await this.getUserByUniqueKey({'username': username});
+        } catch (e) {
+            console.log('username is available');
+            return true;
+        }
+
+        console.log('username is unavailable');
+        return false;
+
+    }
+
+    private async isAccountAvailable(acname: string): Promise<boolean> {
+
+        try {
+            await this.getUserByUniqueKey({'account_name': acname});
+        } catch (e) {
+            console.log('Account name is available');
+            return true;
+        }
+
+        console.log('Account name is unavailable');
+        return false;
 
     }
 
