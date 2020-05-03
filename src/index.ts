@@ -20,7 +20,7 @@ export const connectionPool: Pool = new Pool({
     database: process.env['DB_NAME'],
     user: process.env['DB_USERNAME'],
     password: process.env['DB_PASSWORD'],
-    max: 5
+    max: 20
 });
 
 // logging configuration
