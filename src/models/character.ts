@@ -1,20 +1,22 @@
 export class Character {
 
     charId: number;
-    userId: number;
     charName: string;
     leagueName: string;
     rank: number;
     charLevel: number;
+    accountName: string;
 
-
-    constructor(ci: number, ui: number, cn: string, ln: string, rank: number, cl: number) {
-        this.charId = ci;
-        this.userId = ui;
-        this.charName = cn;
-        this.leagueName = ln;
+    constructor(charid: number, charname: string, lname: string, rank: number, clevel: number, acname: string) {
+        this.charId = charid;
+        this.charName = charname;
+        this.leagueName = lname;
         this.rank = rank;
-        this.charLevel = cl;
+        this.charLevel = clevel;
+        this.accountName = acname;
+        
+        
+        
 
     }
 
