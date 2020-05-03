@@ -8,7 +8,7 @@ import { Pool } from 'pg';
 import { sessionMiddleware } from './middleware/session-middleware';
 import { corsFilter } from './middleware/cors-filter';
 import { AuthRouter } from './routers/auth-router';
-import { CharRouter } from './routers/external-api-router';
+import { CharRouter } from './routers/character-router';
 
 // environment configuration
 dotenv.config();
