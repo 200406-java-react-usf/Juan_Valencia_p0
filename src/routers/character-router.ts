@@ -1,11 +1,12 @@
 import express from 'express';
-import AppConfig from '../config/app'
-import httprequest from '../requests/character-request'
+import AppConfig from '../config/app';
+import httprequest from '../requests/character-request';
 import { adminGuard } from '../middleware/auth-middleware';
 
 export const CharRouter = express.Router();
 
 const charService = AppConfig.charService;
+const statService = AppConfig.statService;
 
 CharRouter.post('', async (req, resp, next) => {
     let result;
@@ -20,6 +21,7 @@ CharRouter.post('', async (req, resp, next) => {
     try {
         console.log('POST REQUEST RECEIVED AT /Character');
         await charService.addNewChar(result, acName, lName);
+        await statService.addStats(result, acName);
         resp.sendStatus(201);
     }
     catch (e) {
@@ -29,22 +31,22 @@ CharRouter.post('', async (req, resp, next) => {
 
 });
 
-CharRouter.get('', adminGuard, async (req, resp) => {
+CharRouter.get('', async (req, resp) => {
     try {
-
-        // let reqURL = url.parse(req.url, true);
-
-        // if(!isEmptyObject(reqURL.query)) {
-        //     let payload = await charService.getUserByUniqueKey({...reqURL.query});;
-        //     return resp.status(200).json(payload);
-        // } else {
-        //     let payload = await charService.getAllChars();
-        //     return resp.status(200).json(payload);
-        // }
 
         let payload = await charService.getAllChars();
         return resp.status(200).json(payload);
 
+    } catch (e) {
+        return resp.status(e.statusCode).json(e).send();
+    }
+});
+
+CharRouter.get('/:id', async (req, resp) => {
+    const id = +req.params.id;
+    try {
+        let payload = await charService.getCharById(id);
+        return resp.status(200).json(payload);
     } catch (e) {
         return resp.status(e.statusCode).json(e).send();
     }
@@ -73,7 +75,7 @@ CharRouter.delete('', adminGuard, async (req, resp) => {
 
     }
     catch (e) {
-        resp.status(e.statusCode).json(e).send();;
+        resp.status(e.statusCode).json(e).send();
     }
     //resp.send();
 });

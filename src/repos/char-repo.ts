@@ -35,14 +35,14 @@ export class CharRepository implements CrudRepository<Character> {
         }
     }
 
-    async getById(id: number): Promise<Character> {
+    async getById(id: number): Promise<Character[]> {
         let client: PoolClient;
 
         try {
             client = await connectionPool.connect();
             let sql = `${this.baseQuery} where au.user_id = $1 ;`;
             let rs = await client.query(sql, [id]);
-            return mapCharacterResultSet(rs.rows[0]);
+            return rs.rows.map(mapCharacterResultSet);
         } catch (e) {
             throw new InternalServerError();
         } finally {
@@ -89,8 +89,8 @@ export class CharRepository implements CrudRepository<Character> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `update characters set ranking = $1 , char_level = $2 where char_id = $3 ;`;
-            let rs = await client.query(sql, [ updatedChar.rank, updatedChar.charLevel, updatedChar.charId ]);
+            let sql = 'update characters set ranking = $1 , char_level = $2 where char_id = $3 ;';
+            await client.query(sql, [ updatedChar.rank, updatedChar.charLevel, updatedChar.charId ]);
             return true;
         } catch (e) {
             throw new InternalServerError(e);
@@ -104,8 +104,8 @@ export class CharRepository implements CrudRepository<Character> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `delete from characters where user_id = $1 `;
-            let rs = await client.query(sql, [id]);
+            let sql = 'delete from characters where user_id = $1 ';
+            await client.query(sql, [id]);
             return true;
         } catch (e) {
             throw new InternalServerError(e);
