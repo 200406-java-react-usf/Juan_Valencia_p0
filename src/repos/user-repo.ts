@@ -1,4 +1,3 @@
-//import sql from '../data/user-db';
 import { User } from '../models/user';
 import { CrudRepository } from './crud-repo';
 import { PoolClient } from 'pg';
@@ -6,10 +5,10 @@ import { connectionPool } from '..';
 import { mapUserResultSet } from '../util/result-set-mapper';
 import { InternalServerError } from '../errors/errors';
 
-let sql;
+
 export class UserRepository implements CrudRepository<User> {
 
-    baseQuery = `
+    private baseQuery = `
     select
         au.user_id, 
         au.username, 
@@ -41,7 +40,7 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `${this.baseQuery} where au.id = $1 ;`;
+            let sql = `${this.baseQuery} where au.user_id = $1 ;`;
             let rs = await client.query(sql, [id]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
@@ -112,16 +111,16 @@ export class UserRepository implements CrudRepository<User> {
     }
 
     async update(updatedUser: User): Promise<boolean> {
-
+        console.log(`password : ${updatedUser.password} and account : ${updatedUser.account_name} and  user : ${updatedUser.username}`)
         let client: PoolClient;
 
         try {
             client = await connectionPool.connect();
-            let sql = ``;
-            let rs = await client.query(sql, []);
+            let sql = `update app_users set password = $1 , account_name = $2 where username = $3 ;`;
+            let rs = await client.query(sql, [ updatedUser.password, updatedUser.account_name, updatedUser.username ]);
             return true;
         } catch (e) {
-            throw new InternalServerError();
+            throw new InternalServerError(e);
         } finally {
             client && client.release();
         }
@@ -129,16 +128,16 @@ export class UserRepository implements CrudRepository<User> {
     }
 
     async deleteById(id: number): Promise<boolean> {
-
+        console.log(id);
         let client: PoolClient;
 
         try {
             client = await connectionPool.connect();
-            let sql = ``;
-            let rs = await client.query(sql, []);
+            let sql = `delete from app_users where user_id = $1 `;
+            let rs = await client.query(sql, [id]);
             return true;
         } catch (e) {
-            throw new InternalServerError();
+            throw new InternalServerError(e);
         } finally {
             client && client.release();
         }
