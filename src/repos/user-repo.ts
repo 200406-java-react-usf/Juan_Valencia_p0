@@ -128,7 +128,7 @@ export class UserRepository implements CrudRepository<User> {
     }
 
     async deleteById(id: number): Promise<boolean> {
-        console.log(id);
+
         let client: PoolClient;
 
         try {
