@@ -32,7 +32,7 @@ let httprequest = async (lName: string, acName: string) => {
             throw new InternalServerError(err);
         })
 
-    console.log(result);
+
     return result;
 
 }
