@@ -9,6 +9,7 @@ import { sessionMiddleware } from './middleware/session-middleware';
 import { corsFilter } from './middleware/cors-filter';
 import { AuthRouter } from './routers/auth-router';
 import { CharRouter } from './routers/character-router';
+import { StatRouter } from './routers/stat-router';
 
 // environment configuration
 dotenv.config();
@@ -37,8 +38,9 @@ app.use('/', express.json());
 app.use('/users', UserRouter);
 app.use('/auth', AuthRouter);
 app.use('/characters', CharRouter);
+app.use('/stats', StatRouter);
 //app.use('/stats', StatsRouter);
 
 app.listen(8080, () => {
     console.log('App running and listening on http://localhost:8080');
-})
+});
