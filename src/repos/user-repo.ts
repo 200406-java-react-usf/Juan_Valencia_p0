@@ -24,7 +24,7 @@ export class UserRepository implements CrudRepository<User> {
         try {
             client = await connectionPool.connect();
             let sql = `${this.baseQuery}`;
-            let rs = await client.query(sql); // rs = ResultSet
+            let rs = await client.query(sql); 
             return rs.rows.map(mapUserResultSet);
         } catch (e) {
             throw new InternalServerError();
@@ -92,14 +92,11 @@ export class UserRepository implements CrudRepository<User> {
 
         let client: PoolClient;
 
-        // console.log('at persisting')
-        //     let sql = `insert into app_users (username, password, first_name, last_name, email, role_id) values ( $1 , $2 , $3 , $4 , $5 , 3)`;
-        //     let rs = await client.query(sql, [newUser.username ,newUser.password ,newUser.firstName ,newUser.lastName ,newUser.email]);
-        //     return mapUserResultSet(rs.rows[0]);
+
 
         try {
             client = await connectionPool.connect();
-            let sql = `insert into app_users (username, password, account_name) values ( $1 , $2 , $3 ) ;`;
+            let sql = 'insert into app_users (username, password, account_name) values ( $1 , $2 , $3 ) ;';
             let rs = await client.query(sql, [newUser.username ,newUser.password , newUser.account_name]);
             return mapUserResultSet(rs.rows[0]);
         } catch (e) {
@@ -111,13 +108,13 @@ export class UserRepository implements CrudRepository<User> {
     }
 
     async update(updatedUser: User): Promise<boolean> {
-        console.log(`password : ${updatedUser.password} and account : ${updatedUser.account_name} and  user : ${updatedUser.username}`)
+        console.log(`password : ${updatedUser.password} and account : ${updatedUser.account_name} and  user : ${updatedUser.username}`);
         let client: PoolClient;
 
         try {
             client = await connectionPool.connect();
-            let sql = `update app_users set password = $1 , account_name = $2 where username = $3 ;`;
-            let rs = await client.query(sql, [ updatedUser.password, updatedUser.account_name, updatedUser.username ]);
+            let sql = 'update app_users set password = $1 , account_name = $2 where username = $3 ;';
+            await client.query(sql, [ updatedUser.password, updatedUser.account_name, updatedUser.username ]);
             return true;
         } catch (e) {
             throw new InternalServerError(e);
@@ -133,8 +130,8 @@ export class UserRepository implements CrudRepository<User> {
 
         try {
             client = await connectionPool.connect();
-            let sql = `delete from app_users where user_id = $1 `;
-            let rs = await client.query(sql, [id]);
+            let sql = 'delete from app_users where user_id = $1 ';
+            await client.query(sql, [id]);
             return true;
         } catch (e) {
             throw new InternalServerError(e);

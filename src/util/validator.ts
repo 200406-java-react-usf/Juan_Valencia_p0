@@ -21,7 +21,7 @@ export const isPropertyOf = (prop: string, type: any) => {
 
     let typeCreator = <T>(Type: (new () => T)): T => {
         return new Type();
-    } 
+    }; 
 
     let tempInstance;
     try {
@@ -32,7 +32,7 @@ export const isPropertyOf = (prop: string, type: any) => {
     
     return Object.keys(tempInstance).includes(prop);
 
-}
+};
 
 export function isEmptyObject(obj: any){
     return obj && Object.keys(obj).length === 0;
@@ -43,4 +43,4 @@ export default {
     isValidStrings,
     isValidObject,
     isPropertyOf
-}
+};

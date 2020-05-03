@@ -16,7 +16,7 @@ UserRouter.get('', adminGuard, async (req, resp) => {
         let reqURL = url.parse(req.url, true);
 
         if(!isEmptyObject(reqURL.query)) {
-            let payload = await userService.getUserByUniqueKey({...reqURL.query});;
+            let payload = await userService.getUserByUniqueKey({...reqURL.query});
             return resp.status(200).json(payload);
         } else {
             let payload = await userService.getAllUsers();
@@ -64,7 +64,7 @@ UserRouter.delete('', adminGuard, async (req, resp) => {
 
     }
     catch(e){
-        resp.status(e.statusCode).json(e).send();;
+        resp.status(e.statusCode).json(e).send();
     }
     //resp.send();
 });

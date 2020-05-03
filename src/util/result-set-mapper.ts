@@ -1,7 +1,7 @@
-import { UserSchema, CharacterSchema, StatSchema } from "./schemas";
-import { User } from "../models/user";
-import { Character } from "../models/character";
-import { Stat } from "../models/stat";
+import { UserSchema, CharacterSchema, StatSchema } from './schemas';
+import { User } from '../models/user';
+import { Character } from '../models/character';
+import { Stat } from '../models/stat';
 
 export function mapUserResultSet(resultSet: UserSchema): User {
     
@@ -41,10 +41,10 @@ export function mapStatResultSet(resultSet: StatSchema): Stat {
 
     return new Stat(
         resultSet.stat_id,
-        resultSet.user_id,
         resultSet.avg_rank,
         resultSet.avg_char_level,
         resultSet.improved,
-        resultSet.created_on
+        resultSet.created_on,       
+        resultSet.account_name,
     );
 }

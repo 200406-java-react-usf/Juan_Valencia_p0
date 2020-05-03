@@ -1,7 +1,7 @@
-import { User } from "../models/user";
-import { UserRepository } from "../repos/user-repo";
-import { isValidId, isValidStrings, isValidObject, isPropertyOf, isEmptyObject } from "../util/validator";
-import { BadRequestError, ResourceNotFoundError, ResourcePersistenceError, AuthenticationError } from "../errors/errors";
+import { User } from '../models/user';
+import { UserRepository } from '../repos/user-repo';
+import { isValidId, isValidStrings, isValidObject, isPropertyOf, isEmptyObject } from '../util/validator';
+import { BadRequestError, ResourceNotFoundError, ResourcePersistenceError, AuthenticationError } from '../errors/errors';
 
 export class UserService {
 
@@ -80,11 +80,7 @@ export class UserService {
 
         let authUser: User;
 
-        try {
-            authUser = await this.userRepo.getUserByCredentials(un, pw);
-        } catch (e) {
-            throw e;
-        }
+        authUser = await this.userRepo.getUserByCredentials(un, pw);
 
         if (Object.keys(authUser).length === 0) {
             throw new AuthenticationError('Bad credentials provided.');
@@ -121,26 +117,19 @@ export class UserService {
 
     async updateUser(updatedUser: User): Promise<boolean> {
 
-        try {
+        if (!isValidObject(updatedUser)) {
+            throw new BadRequestError('Invalid user provided (invalid values found).');
 
-            if (!isValidObject(updatedUser)) {
-                throw new BadRequestError('Invalid user provided (invalid values found).');
+        }
 
-            }
+        let queryKeys = Object.keys(updatedUser);
 
-            let queryKeys = Object.keys(updatedUser);
-
-            if (!queryKeys.every(key => isPropertyOf(key, User))) {
-                throw new BadRequestError();
-            }
-
-            console.log(updatedUser)
-            return await this.userRepo.update(updatedUser);
-        } catch (e) {
-            throw e;
+        if (!queryKeys.every(key => isPropertyOf(key, User))) {
+            throw new BadRequestError();
         }
 
 
+        return await this.userRepo.update(updatedUser);
 
     }
 

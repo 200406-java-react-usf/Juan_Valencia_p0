@@ -30,11 +30,11 @@ let httprequest = async (lName: string, acName: string) => {
         })
         .catch(err => {
             throw new InternalServerError(err);
-        })
+        });
 
 
     return result;
 
-}
+};
 
 export default httprequest;
