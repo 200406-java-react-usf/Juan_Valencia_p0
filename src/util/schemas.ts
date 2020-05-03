@@ -7,11 +7,11 @@ export interface UserSchema {
 
 export interface CharacterSchema {
     char_id: number;
-    user_id: number;
     char_name: string;
     league_name: string;
-    rank: number;
+    ranking: number;
     char_level: number;
+    account_name: string;
 }
 
 export interface StatSchema {

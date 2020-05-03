@@ -25,15 +25,15 @@ export function mapCharacterResultSet(resultSet: CharacterSchema): Character {
 
     return new Character(
         resultSet.char_id,
-        resultSet.user_id,
         resultSet.char_name,
         resultSet.league_name,
-        resultSet.rank,
-        resultSet.char_level
+        resultSet.ranking,
+        resultSet.char_level,
+        resultSet.account_name
     );
 }
 
-export function mapStatrResultSet(resultSet: StatSchema): Stat {
+export function mapStatResultSet(resultSet: StatSchema): Stat {
     
     if (!resultSet) {
         return {} as Stat;
