@@ -1,13 +1,13 @@
 import express from 'express';
-import AppConfig from '../config/app';
+import {statService} from '../config/app';
 
 export const StatRouter = express.Router();
 
-const statService = AppConfig.statService;
+const statServices = statService;
 
 StatRouter.get('',  async (req, resp) => {
     try {
-        let payload = await statService.getAllStats();
+        let payload = await statServices.getAllStats();
         return resp.status(200).json(payload);
 
     } catch (e) {

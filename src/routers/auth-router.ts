@@ -1,10 +1,10 @@
 import express from 'express';
-import AppConfig from '../config/app';
+import {userService} from '../config/app';
 import { Principal } from '../models/principal';
 
 export const AuthRouter = express.Router();
 
-const userService = AppConfig.userService;
+const userServices = userService;
 
 AuthRouter.get('', (req, resp) => {
     delete req.session.principal;
@@ -16,7 +16,7 @@ AuthRouter.post('', async (req, resp) => {
     try {
 
         const { username, password } = req.body;
-        let authUser = await userService.authenticateUser(username, password);
+        let authUser = await userServices.authenticateUser(username, password);
         let payload = new Principal(authUser.id, authUser.username, authUser.account_name);
         req.session.principal = payload;
         resp.status(200).json(payload);

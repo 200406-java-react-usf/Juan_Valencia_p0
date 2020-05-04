@@ -15,8 +15,10 @@ const statRepo = new StatRepository();
 const statService = new StatService(statRepo);
 
 
-export default {
+export {
     userService,
     charService,
-    statService
+    statService,
+    charRepo,
+    statRepo
 };

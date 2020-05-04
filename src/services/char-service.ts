@@ -1,7 +1,7 @@
 import { Character } from '../models/character';
 import { CharRepository } from '../repos/char-repo';
 import { isValidId, isValidStrings, isValidObject, isPropertyOf, isEmptyObject } from '../util/validator';
-import { BadRequestError, ResourceNotFoundError, ResourcePersistenceError, AuthenticationError } from '../errors/errors';
+import { BadRequestError, ResourceNotFoundError } from '../errors/errors';
 
 export class CharService {
 
@@ -64,16 +64,15 @@ export class CharService {
 
     async addNewChar(allEntries: any, acname: string, lname: string): Promise<Character> {
         let convertion;
-
+        let newchar;
         for(let newEntry of allEntries){
             convertion = new Character(1,  newEntry.character.name, lname, newEntry.rank, newEntry.character.level,acname);
-            console.log(convertion);
 
-            await this.charRepo.save( convertion );
+            newchar = await this.charRepo.save( convertion );
             
         }
 
-        return convertion;
+        return newchar;
     }
 
     async updateChar(updatedChar: Character): Promise<boolean> {

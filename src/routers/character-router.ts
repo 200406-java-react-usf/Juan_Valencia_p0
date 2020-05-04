@@ -1,13 +1,13 @@
 import express from 'express';
-import AppConfig from '../config/app';
+import {charService,statService} from '../config/app';
 import httprequest from '../requests/character-request';
 import { adminGuard } from '../middleware/auth-middleware';
 import { ResourceNotFoundError } from '../errors/errors';
 
 export const CharRouter = express.Router();
 
-const charService = AppConfig.charService;
-const statService = AppConfig.statService;
+const charServices = charService;
+const statServices = statService;
 
 CharRouter.post('', async (req, resp) => {
     let result;
@@ -20,8 +20,8 @@ CharRouter.post('', async (req, resp) => {
     else {
         try {
             console.log('POST REQUEST RECEIVED AT /Character');
-            await charService.addNewChar(result, acName, lName);
-            await statService.addStats(result, acName);
+            await charServices.addNewChar(result, acName, lName);
+            await statServices.addStats(result, acName);
             resp.status(201).send();
         }
         catch (e) {
@@ -34,7 +34,7 @@ CharRouter.post('', async (req, resp) => {
 CharRouter.get('', async (req, resp) => {
     try {
 
-        let payload = await charService.getAllChars();
+        let payload = await charServices.getAllChars();
         return resp.status(200).json(payload);
 
     } catch (e) {
@@ -45,7 +45,7 @@ CharRouter.get('', async (req, resp) => {
 CharRouter.get('/:id', async (req, resp) => {
     const id = +req.params.id;
     try {
-        let payload = await charService.getCharById(id);
+        let payload = await charServices.getCharById(id);
         return resp.status(200).json(payload);
     } catch (e) {
         return resp.status(e.statusCode).json(e).send();
@@ -57,7 +57,7 @@ CharRouter.put('', async (req, resp) => {
     console.log('PUT REQUEST RECEIVED AT /users');
     console.log(req.body);
     try {
-        let newUser = await charService.updateChar(req.body);
+        let newUser = await charServices.updateChar(req.body);
         return resp.status(201).json(newUser).send();
     } catch (e) {
         return resp.status(e.statusCode).json(e).send();
@@ -70,7 +70,7 @@ CharRouter.delete('', adminGuard, async (req, resp) => {
     console.log('DELETE REQUEST RECEIVED AT /Characters');
     console.log(req.body);
     try {
-        await charService.deleteById(+req.body.id);
+        await charServices.deleteById(+req.body.id);
         resp.sendStatus(204);
 
     }
