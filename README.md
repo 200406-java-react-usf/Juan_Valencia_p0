@@ -28,4 +28,6 @@ DELETE /characters - deletes all characters own by said user. ( For testing purp
 GET /Stats - Retrieves all the stats with a column of when the characters were retrieved/stats-created.
 
 ERD -- 
+
+
 ![alt text](./BasicDatabaseERDiagram.png)
