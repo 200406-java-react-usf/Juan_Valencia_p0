@@ -2,7 +2,6 @@ import { UserRepository } from '../repos/user-repo';
 import * as mockIndex from '..';
 import * as mockMapper from '../util/result-set-mapper';
 import { User } from '../models/user';
-import { InternalServerError } from '../errors/errors';
 
 jest.mock('..', () => {
     return {
@@ -25,11 +24,6 @@ describe('userRepo', () => {
 
     beforeEach(() => {
 
-        /*
-            We can provide a successful retrieval as the default mock implementation
-            since it is very verbose. We can provide alternative implementations for
-            the query and release methods in specific tests if needed.
-        */
         (mockConnect as jest.Mock).mockClear().mockImplementation(() => {
             return {
                 query: jest.fn().mockImplementation(() => {
@@ -47,6 +41,7 @@ describe('userRepo', () => {
                 release: jest.fn()
             }
         });
+        
         (mockMapper.mapUserResultSet as jest.Mock).mockClear();
     });
 
@@ -69,7 +64,7 @@ describe('userRepo', () => {
 
     });
 
-    test('should resolve to an empty array when getAll retrieves no records from data source', async () => {
+    test('should resolve to an empty array when getAll retrieves a records from data source', async () => {
         
         // Arrange
         expect.hasAssertions();
@@ -108,7 +103,7 @@ describe('userRepo', () => {
 
     });
 
-    test('should resolve to a User object when getById retrieves no record from data source', async () => {
+    test('should resolve to an empty array when getById retrieves a record from data source', async () => {
 
         // Arrange
         expect.hasAssertions();
@@ -146,7 +141,7 @@ describe('userRepo', () => {
 
     });
 
-    test('should resolve to a User object when getUserByUniqueKey retrieves no record from data source', async () => {
+    test('should resolve to an empty array when getUserByUniqueKey retrieves a record from data source', async () => {
 
         // Arrange
         expect.hasAssertions();
@@ -176,7 +171,7 @@ describe('userRepo', () => {
         (mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(mockUser);
 
         // Act
-        let result = await sut.getUserByUniqueKey('username', 'jvalencia');
+        let result = await sut.getUserByCredentials('username', 'jvalencia');
 
         // Assert
         expect(result).toBeTruthy();
@@ -184,6 +179,98 @@ describe('userRepo', () => {
 
     });
 
+    test('should resolve to an empty array when getUserByCredentials retrieves a record from data source', async () => {
+
+        // Arrange
+        expect.hasAssertions();
+        
+        (mockConnect as jest.Mock).mockImplementation(() => {
+            return {
+                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                release: jest.fn()
+            }
+        });
+
+        // Act
+        let result = await sut.getUserByCredentials('username', 'jvalencia');
+
+        // Assert
+        expect(result).toBeTruthy();
+        expect(result instanceof User).toBe(true);
+
+    });
+
+    test('should resolve to a User object when save persists a record to the data source', async () => {
+
+        // Arrange
+        expect.hasAssertions();
+
+        let mockUser = new User(1, 'un', 'pw', 'an');
+        (mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(mockUser);
+
+        // Act
+        let result = await sut.save(mockUser);
+
+        // Assert
+        expect(result).toBeTruthy();
+        expect(result instanceof User).toBe(true);
+
+    });
+
+    test('should resolve to an empty array when save persists a record to the data source', async () => {
+
+        // Arrange
+        expect.hasAssertions();
+        let mockUser = new User(1, 'un', 'pw', 'an');
+        (mockConnect as jest.Mock).mockImplementation(() => {
+            return {
+                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                release: jest.fn()
+            }
+        });
+
+        // Act
+        let result = await sut.save(mockUser);
+
+        // Assert
+        expect(result).toBeTruthy();
+        expect(result instanceof User).toBe(true);
+
+    });
+
+    test('should resolve to true when update updates a record on the data source', async () => {
+
+        // Arrange
+        expect.hasAssertions();
+
+        let mockUser = new User(1, 'un', 'pw', 'an');
+        (mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(true);
+
+        // Act
+        let result = await sut.update(mockUser);
+
+        // Assert
+        expect(result).toBeTruthy();
+        expect(result).toBe(true);
+
+    });
+
+    test('should resolve to true when deleteById deletes a record on the data source', async () => {
+
+        // Arrange
+        expect.hasAssertions();
+
+        
+        (mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(true);
+
+        // Act
+        let result = await sut.deleteById(2);
+
+        // Assert
+        expect(result).toBeTruthy();
+        expect(result).toBe(true);
+
+    });
 
 
 });
