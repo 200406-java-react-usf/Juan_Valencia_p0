@@ -2,7 +2,7 @@ import { Character } from '../models/character';
 import { CrudRepository } from './crud-repo';
 import { PoolClient } from 'pg';
 import { connectionPool } from '..';
-import { mapUserResultSet, mapCharacterResultSet } from '../util/result-set-mapper';
+import { mapCharacterResultSet } from '../util/result-set-mapper';
 import { InternalServerError } from '../errors/errors';
 
 export class CharRepository implements CrudRepository<Character> {
