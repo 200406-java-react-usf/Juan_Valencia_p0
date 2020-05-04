@@ -10,6 +10,6 @@
       "allowSyntheticDefaultImports": true
     },
     "include": [
-      "src/**/*.ts"       //which kind of files to compile
+      "src/**/*"       //which kind of files to compile
     ]
  }

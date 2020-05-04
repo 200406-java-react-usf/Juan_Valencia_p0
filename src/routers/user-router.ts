@@ -28,7 +28,7 @@ UserRouter.get('', adminGuard, async (req, resp) => {
     }
 });
 
-UserRouter.get('/:id', adminGuard, async (req, resp) => {
+UserRouter.get('/:id', async (req, resp) => {
     const id = +req.params.id;
     try {
         let payload = await userService.getUserById(id);
@@ -69,7 +69,7 @@ UserRouter.delete('', adminGuard, async (req, resp) => {
     //resp.send();
 });
 
-UserRouter.put('', async (req, resp) => {
+UserRouter.put('', adminGuard, async (req, resp) => {
 
     console.log('PUT REQUEST RECEIVED AT /users');
     console.log(req.body);

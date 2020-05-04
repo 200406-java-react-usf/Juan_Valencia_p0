@@ -2,32 +2,32 @@ import express from 'express';
 import AppConfig from '../config/app';
 import httprequest from '../requests/character-request';
 import { adminGuard } from '../middleware/auth-middleware';
+import { ResourceNotFoundError } from '../errors/errors';
 
 export const CharRouter = express.Router();
 
 const charService = AppConfig.charService;
 const statService = AppConfig.statService;
 
-CharRouter.post('', async (req, resp, next) => {
+CharRouter.post('', async (req, resp) => {
     let result;
     let acName = req.body.accountName;
     let lName = req.body.leagueName;
     result = await httprequest(lName, acName);
     if (!result[0]) {
-        resp.sendStatus(404);
-        next();
+        resp.status(404).json(new ResourceNotFoundError());
     }
-
-    try {
-        console.log('POST REQUEST RECEIVED AT /Character');
-        await charService.addNewChar(result, acName, lName);
-        await statService.addStats(result, acName);
-        resp.sendStatus(201);
+    else {
+        try {
+            console.log('POST REQUEST RECEIVED AT /Character');
+            await charService.addNewChar(result, acName, lName);
+            await statService.addStats(result, acName);
+            resp.status(201).send();
+        }
+        catch (e) {
+            resp.sendStatus(e.statusCode);
+        }
     }
-    catch (e) {
-        resp.status(e.statusCode).json(e);
-    }
-
 
 });
 

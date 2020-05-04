@@ -39,7 +39,6 @@ app.use('/users', UserRouter);
 app.use('/auth', AuthRouter);
 app.use('/characters', CharRouter);
 app.use('/stats', StatRouter);
-//app.use('/stats', StatsRouter);
 
 app.listen(8080, () => {
     console.log('App running and listening on http://localhost:8080');
