@@ -52,9 +52,9 @@ export class UserService {
         let val = queryObj[key];
 
         // if they are searching for a user by id, reuse the logic we already have
-        if (key === 'id') {
-            throw await this.getUserById(+val);
-        }
+        // if (key === 'id') {
+        //     throw await this.getUserById(+val);
+        // }
 
         // ensure that the provided key value is valid
         if (!isValidStrings(val)) {
@@ -96,7 +96,7 @@ export class UserService {
         if (!isValidObject(newUser, 'id')) {
             throw new BadRequestError('Invalid property values found in provided user.');
         }
-
+        
         let usernameAvailable = await this.isUsernameAvailable(newUser.username);
 
         if (!usernameAvailable) {
@@ -127,7 +127,10 @@ export class UserService {
         if (!queryKeys.every(key => isPropertyOf(key, User))) {
             throw new BadRequestError();
         }
-
+        
+        if(!(queryKeys.length === 3)){
+            throw new BadRequestError();
+        }
 
         return await this.userRepo.update(updatedUser);
 
@@ -155,11 +158,11 @@ export class UserService {
         try {
             await this.getUserByUniqueKey({ 'username': username });
         } catch (e) {
-            console.log('username is available');
+            //console.log('username is available');
             return true;
         }
 
-        console.log('username is unavailable');
+        //console.log('username is unavailable');
         return false;
 
     }
@@ -169,11 +172,11 @@ export class UserService {
         try {
             await this.getUserByUniqueKey({ 'account_name': acname });
         } catch (e) {
-            console.log('Account name is available');
+            //console.log('Account name is available');
             return true;
         }
 
-        console.log('Account name is unavailable');
+        //console.log('Account name is unavailable');
         return false;
 
     }

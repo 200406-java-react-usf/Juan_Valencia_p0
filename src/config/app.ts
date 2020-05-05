@@ -18,7 +18,5 @@ const statService = new StatService(statRepo);
 export {
     userService,
     charService,
-    statService,
-    charRepo,
-    statRepo
+    statService
 };

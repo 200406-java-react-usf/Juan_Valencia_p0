@@ -53,6 +53,7 @@ export class CharService {
         }
 
         let char = await this.charRepo.getCharByUniqueKey(key, val);
+        
         if (isEmptyObject(char)) {
             throw new ResourceNotFoundError();
         }
@@ -88,7 +89,6 @@ export class CharService {
             throw new BadRequestError();
         }
 
-        console.log(updatedChar);
         return await this.charRepo.update(updatedChar);
 
 

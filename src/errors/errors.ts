@@ -63,15 +63,6 @@ class AuthorizationError extends ApplicationError {
 
 }
 
-class NotImplementedError extends ApplicationError {
-
-    constructor(reason?: string) {
-        super(501, reason);
-        super.setMessage('No implementation yet!');
-    }
-
-}
-
 class InternalServerError extends ApplicationError {
 
     constructor(reason?: string) {
@@ -86,7 +77,6 @@ export {
     ResourcePersistenceError,
     BadRequestError,
     AuthenticationError,
-    NotImplementedError,
     InternalServerError,
     AuthorizationError
 };
