@@ -1,19 +1,27 @@
 import { CharRepository } from "../repos/char-repo";
-import { charRepo} from '../config/app';
-import * as mockIndex from '..';
+//import * as mockIndex from '..';
+import { connectionPool } from '..'
 import * as mockMapper from '../util/result-set-mapper';
 import { Character } from "../models/character";
 
+jest.mock('..', () => {
+    return {
+        connectionPool: {
+            connect: jest.fn()
+        }
+    }
+});
+
 jest.mock('../util/result-set-mapper', () => {
     return {
-        mapUserResultSet: jest.fn()
+        mapCharacterResultSet: jest.fn()
     }
 });
 
 describe('charRepo', () => {
 
-    let sut = charRepo;
-    let mockConnect = mockIndex.connectionPool.connect;
+    let sut = new CharRepository();
+    let mockConnect = connectionPool.connect;
 
     beforeEach(() => {
 
@@ -86,19 +94,15 @@ describe('charRepo', () => {
         // Arrange
         expect.hasAssertions();
 
-        (mockConnect as jest.Mock).mockImplementation(() => {
-            return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
-                release: jest.fn()
-            }
-        });
+        let mockUser = new Character(1,'cn','ln',1,100,'acn');
+        (mockMapper.mapCharacterResultSet as jest.Mock).mockReturnValue(mockUser);
 
         // Act
         let result = await sut.getById(1);
 
         // Assert
         expect(result).toBeTruthy();
-        expect(result instanceof Character).toBe(true);
+        expect(result instanceof Array).toBe(true);
 
     });
 
@@ -119,7 +123,7 @@ describe('charRepo', () => {
 
         // Assert
         expect(result).toBeTruthy();
-        expect(result instanceof Character).toBe(true);
+        expect(result instanceof Array).toBe(true);
 
     });
 
@@ -223,10 +227,10 @@ describe('charRepo', () => {
         expect.hasAssertions();
 
         
-        (mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(true);
+        (mockMapper.mapCharacterResultSet as jest.Mock).mockReturnValue(true);
 
         // Act
-        let result = await sut.deleteById(2);
+        let result = await sut.deleteById(1);
 
         // Assert
         expect(result).toBeTruthy();

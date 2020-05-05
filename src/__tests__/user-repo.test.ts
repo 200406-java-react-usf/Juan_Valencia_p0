@@ -2,6 +2,7 @@ import { UserRepository } from '../repos/user-repo';
 import * as mockIndex from '..';
 import * as mockMapper from '../util/result-set-mapper';
 import { User } from '../models/user';
+import { InternalServerError } from '../errors/errors';
 
 jest.mock('..', () => {
     return {
@@ -205,7 +206,7 @@ describe('userRepo', () => {
         // Arrange
         expect.hasAssertions();
 
-        let mockUser = new User(1, 'un', 'pw', 'an');
+        let mockUser = new User(1, 'x', 'x', 'at');
         (mockMapper.mapUserResultSet as jest.Mock).mockReturnValue(mockUser);
 
         // Act
