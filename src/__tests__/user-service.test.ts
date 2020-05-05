@@ -376,7 +376,8 @@ describe('userService', () => {
             });
         });
 
-
+        sut.isUsernameAvailable = jest.fn().mockReturnValue(true);
+        sut.isAccountAvailable = jest.fn().mockReturnValue(true);
 
         // Act
         let result = await sut.addNewUser(new User(1, 'aanderson', 'password', 'Alice'));
@@ -385,6 +386,72 @@ describe('userService', () => {
         expect(result).toBeTruthy();
         expect(result.username).toBe('aanderson');
         expect(result.password).toBeUndefined();
+
+    });
+
+    test('should ResourcePersistenceError when addNewUser is given an unavailable username', async () => {
+
+        // Arrange
+        expect.assertions(1);
+        
+
+        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+        validator.isValidObject = jest.fn().mockReturnValue(true);
+
+        mockRepo.save = jest.fn().mockImplementation((user: User) => {
+            return new Promise<User>((resolve) => {
+                resolve(user);
+            });
+        });
+
+
+
+        // Act
+        try{
+            sut.isUsernameAvailable = jest.fn().mockReturnValue(false);
+            sut.isAccountAvailable = jest.fn().mockReturnValue(true);
+
+            let result = await sut.addNewUser(new User(1, 'aanderson', 'password', 'Alice'));
+        }
+        catch(e){
+            expect(e instanceof ResourcePersistenceError).toBe(true);
+        }
+
+        // Assert
+        
+
+    });
+
+    test('should ResourcePersistenceError when addNewUser is given an unavailable account name', async () => {
+
+        // Arrange
+        expect.assertions(1);
+        
+
+        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+        validator.isValidObject = jest.fn().mockReturnValue(true);
+
+        mockRepo.save = jest.fn().mockImplementation((user: User) => {
+            return new Promise<User>((resolve) => {
+                resolve(user);
+            });
+        });
+
+
+
+        // Act
+        try{
+            sut.isUsernameAvailable = jest.fn().mockReturnValue(true);
+            sut.isAccountAvailable = jest.fn().mockReturnValue(false);
+            
+            let result = await sut.addNewUser(new User(1, 'xtx', 'password', 'Alice'));
+        }
+        catch(e){
+            expect(e instanceof ResourcePersistenceError).toBe(true);
+        }
+
+        // Assert
+        
 
     });
 

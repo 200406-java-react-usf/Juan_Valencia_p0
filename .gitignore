@@ -2,3 +2,8 @@ node_modules/
 package-lock.json
 build/
 .env
+coverage/
+config/config.json
+migrations/
+models/
+seeders/

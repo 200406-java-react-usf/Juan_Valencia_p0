@@ -87,6 +87,26 @@ describe('userRepo', () => {
 
     });
 
+    test('should throw InternalServerError when getAll() is called but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { throw new Error(); }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.getAll();
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
+
     test('should resolve to a User object when getById retrieves a record from data source', async () => {
 
         // Arrange
@@ -124,6 +144,27 @@ describe('userRepo', () => {
         expect(result instanceof User).toBe(true);
 
     });
+
+    test('should throw InternalServerError when getById() is called but query is unsuccesful', async () => {
+
+		// Arrange
+		expect.hasAssertions();
+		let mockUser = new User(1, 'un', 'pw', 'an');
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { return false; }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.getById(mockUser.id);
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
 
     test('should resolve to a User object when getUserByUniqueKey retrieves a record from data source', async () => {
 
@@ -273,5 +314,24 @@ describe('userRepo', () => {
 
     });
 
+    test('should throw InternalServerError when deleteById() is called but query is unsuccesful', async () => {
 
+		// Arrange
+        expect.hasAssertions();
+        
+		(mockConnect as jest.Mock).mockImplementation( () => {
+			return {
+				query: jest.fn().mockImplementation( () => { throw new Error(); }),
+				release: jest.fn()
+			};
+		});
+
+		// Act
+		try {
+			await sut.deleteById(1);
+		} catch (e) {
+			// Assert
+			expect(e instanceof InternalServerError).toBe(true);
+		}
+	});
 });

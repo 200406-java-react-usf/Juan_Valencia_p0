@@ -43,3 +43,7 @@ app.use('/stats', StatRouter);
 app.listen(8080, () => {
     console.log('App running and listening on http://localhost:8080');
 });
+
+export default {
+    app
+}
