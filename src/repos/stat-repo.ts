@@ -1,9 +1,9 @@
-import { Stat } from "../models/stat";
-import { PoolClient } from "pg";
-import { connectionPool } from "..";
-import { mapStatResultSet, mapUserResultSet } from "../util/result-set-mapper";
-import { InternalServerError } from "../errors/errors";
-import { User } from "../models/user";
+import { Stat } from '../models/stat';
+import { PoolClient } from 'pg';
+import { connectionPool } from '..';
+import { mapStatResultSet, mapUserResultSet } from '../util/result-set-mapper';
+import { InternalServerError } from '../errors/errors';
+import { User } from '../models/user';
 
 export class StatRepository {
 

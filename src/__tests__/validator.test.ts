@@ -1,6 +1,6 @@
-import { isValidId, isValidStrings, isValidObject, isPropertyOf } from "../util/validator";
-import { User } from "../models/user";
-import { Character } from "../models/character";
+import { isValidId, isValidStrings, isValidObject, isPropertyOf } from '../util/validator';
+import { User } from '../models/user';
+import { Character } from '../models/character';
 
 describe('validator', () => {
 
@@ -219,4 +219,4 @@ describe('validator', () => {
 
     });
 
-})
+});

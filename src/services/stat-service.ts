@@ -1,9 +1,9 @@
 
-import { Stat } from "../models/stat";
-import { StatRepository } from "../repos/stat-repo";
-import { ResourceNotFoundError, BadRequestError } from "../errors/errors";
-import { isValidStrings, isEmptyObject, isPropertyOf } from "../util/validator";
-import { User } from "../models/user";
+import { Stat } from '../models/stat';
+import { StatRepository } from '../repos/stat-repo';
+import { ResourceNotFoundError, BadRequestError } from '../errors/errors';
+import { isValidStrings, isEmptyObject, isPropertyOf } from '../util/validator';
+import { User } from '../models/user';
 
 export class StatService {
 
@@ -57,7 +57,7 @@ export class StatService {
         let rankCounter:number = 0;
         let levelCounter: number = 0;
         let counter: number = 0 ;
-        let avgRank: number = 0
+        let avgRank: number = 0;
         let avgLevel: number = 0;
 
         let owner = await this.getStatByUniqueKey({'account_name': acname });

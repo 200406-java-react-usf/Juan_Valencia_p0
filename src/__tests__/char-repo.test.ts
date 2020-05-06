@@ -1,21 +1,21 @@
-import { CharRepository } from "../repos/char-repo";
+import { CharRepository } from '../repos/char-repo';
 //import * as mockIndex from '..';
-import { connectionPool } from '..'
+import { connectionPool } from '..';
 import * as mockMapper from '../util/result-set-mapper';
-import { Character } from "../models/character";
+import { Character } from '../models/character';
 
 jest.mock('..', () => {
     return {
         connectionPool: {
             connect: jest.fn()
         }
-    }
+    };
 });
 
 jest.mock('../util/result-set-mapper', () => {
     return {
         mapCharacterResultSet: jest.fn()
-    }
+    };
 });
 
 describe('charRepo', () => {
@@ -39,10 +39,10 @@ describe('charRepo', () => {
                                 account_name:'admin'
                             }
                         ]
-                    }
+                    };
                 }), 
                 release: jest.fn()
-            }
+            };
         });
         
         (mockMapper.mapCharacterResultSet as jest.Mock).mockClear();
@@ -73,9 +73,9 @@ describe('charRepo', () => {
         expect.hasAssertions();
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -113,9 +113,9 @@ describe('charRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -151,9 +151,9 @@ describe('charRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -190,9 +190,9 @@ describe('charRepo', () => {
         let mockUser = new Character(1,'cn','ln',1,100,'acn');
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act

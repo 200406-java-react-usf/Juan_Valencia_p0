@@ -8,7 +8,9 @@ export class CharService {
     constructor(private charRepo: CharRepository) {
         this.charRepo = charRepo;
     }
-
+    /**
+     * Returns a Promise of type Character[] will throw ResourceNotFoundError if Table is Empty
+     */
     async getAllChars(): Promise<Character[]> {
 
         let chars = await this.charRepo.getAll();
@@ -20,6 +22,10 @@ export class CharService {
         return chars; 
     }
 
+    /**
+     *  Returns a Promise of type Character[]
+     * @param id - number that belongs to the user id.
+     */
     async getCharById(id: number): Promise<Character[]> {
 
         if (!isValidId(id)) {
@@ -43,11 +49,11 @@ export class CharService {
             throw new BadRequestError();
         }
 
-        // we will only support single param searches (for now)
+
         let key = queryKeys[0];
         let val = queryObj[key];
 
-        // ensure that the provided key value is valid
+
         if (!isValidStrings(val)) {
             throw new BadRequestError();
         }
@@ -66,11 +72,15 @@ export class CharService {
     async addNewChar(allEntries: any, acname: string, lname: string): Promise<Character> {
         let convertion;
         let newchar;
-        for(let newEntry of allEntries){
-            convertion = new Character(1,  newEntry.character.name, lname, newEntry.rank, newEntry.character.level,acname);
 
-            newchar = await this.charRepo.save( convertion );
-            
+
+        await this.getCharByUniqueKey({ 'accountName': acname });
+
+        for (let newEntry of allEntries) {
+            convertion = new Character(1, newEntry.character.name, lname, newEntry.rank, newEntry.character.level, acname);
+
+            newchar = await this.charRepo.save(convertion);
+
         }
 
         return newchar;

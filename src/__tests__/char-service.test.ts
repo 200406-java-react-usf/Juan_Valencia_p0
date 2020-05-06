@@ -1,7 +1,7 @@
 import { CharService } from '../services/char-service';
 import { Character } from '../models/character';
 import Validator from '../util/validator';
-import { ResourceNotFoundError, BadRequestError, AuthenticationError } from '../errors/errors';
+import { ResourceNotFoundError, BadRequestError } from '../errors/errors';
 import validator from '../util/validator';
 
 jest.mock('../repos/char-repo', () => {
@@ -13,7 +13,7 @@ jest.mock('../repos/char-repo', () => {
             save = jest.fn();
             update = jest.fn();
             deleteById = jest.fn();
-    }
+    };
 
 });
 describe('charService', () => {
@@ -39,7 +39,7 @@ describe('charService', () => {
                 save: jest.fn(),
                 update: jest.fn(),
                 deleteById: jest.fn()
-            }
+            };
         });
 
         // @ts-ignore
@@ -87,8 +87,8 @@ describe('charService', () => {
 
         mockRepo.getById = jest.fn().mockImplementation((id: number) => {
             return new Promise<Character[]>((resolve) => {
-                mockChars.map(chars => { chars['charId'] === id})
-                resolve(mockChars)
+                mockChars.map(chars => { chars['charId'] === id;});
+                resolve(mockChars);
             });
         });
 
@@ -223,9 +223,9 @@ describe('charService', () => {
         // Act
         try {
 
-        validator.isPropertyOf = jest.fn().mockReturnValue(false);
-        Validator.isValidStrings = jest.fn().mockReturnValue(true);
-        Validator.isEmptyObject = jest.fn().mockReturnValue(false);
+            validator.isPropertyOf = jest.fn().mockReturnValue(false);
+            Validator.isValidStrings = jest.fn().mockReturnValue(true);
+            Validator.isEmptyObject = jest.fn().mockReturnValue(false);
 
             await sut.getCharByUniqueKey('');
         } catch (e) {
@@ -245,15 +245,15 @@ describe('charService', () => {
         // Act
         try {
 
-        validator.isPropertyOf = jest.fn().mockReturnValue(true);
-        Validator.isValidStrings = jest.fn().mockReturnValue(false);
-        Validator.isEmptyObject = jest.fn().mockReturnValue(false);
+            validator.isPropertyOf = jest.fn().mockReturnValue(true);
+            Validator.isValidStrings = jest.fn().mockReturnValue(false);
+            Validator.isEmptyObject = jest.fn().mockReturnValue(false);
 
-        mockRepo.getUserByUniqueKey = jest.fn().mockImplementation((key: string, val: string) => {
-            return new Promise<Character>((resolve) => {
-                resolve(mockChars.find(user => user[key] === val));
+            mockRepo.getUserByUniqueKey = jest.fn().mockImplementation((key: string, val: string) => {
+                return new Promise<Character>((resolve) => {
+                    resolve(mockChars.find(user => user[key] === val));
+                });
             });
-        });
         
             await sut.getCharByUniqueKey({'username': ''});
         } catch (e) {
@@ -273,14 +273,14 @@ describe('charService', () => {
         // Act
         try {
 
-        validator.isPropertyOf = jest.fn().mockReturnValue(true);
-        Validator.isValidStrings = jest.fn().mockReturnValue(true);
-        Validator.isEmptyObject = jest.fn().mockReturnValue(true);
-        mockRepo.getCharByUniqueKey = jest.fn().mockImplementation((key: string, val: string) => {
-            return new Promise<Character>((resolve) => {
-                resolve({} as Character);
+            validator.isPropertyOf = jest.fn().mockReturnValue(true);
+            Validator.isValidStrings = jest.fn().mockReturnValue(true);
+            Validator.isEmptyObject = jest.fn().mockReturnValue(true);
+            mockRepo.getCharByUniqueKey = jest.fn().mockImplementation(() => {
+                return new Promise<Character>((resolve) => {
+                    resolve({} as Character);
+                });
             });
-        });
             await sut.getCharByUniqueKey({'charName': 'x'});
         } catch (e) {
 
@@ -305,6 +305,8 @@ describe('charService', () => {
                 'character': { 'name': 'John', 'level': 100 } 
             }
         ];
+
+        sut.getCharByUniqueKey = jest.fn().mockReturnValue(true);
 
         validator.isValidObject = jest.fn().mockReturnValue(true);
 
@@ -368,8 +370,8 @@ describe('charService', () => {
             await sut.updateChar(new Character(1, '', '',1,0,''));
         }
         catch(e){
-           // Assert
-           expect(e instanceof BadRequestError).toBe(true);
+            // Assert
+            expect(e instanceof BadRequestError).toBe(true);
         }
 
         
@@ -396,8 +398,8 @@ describe('charService', () => {
             await sut.updateChar(new Character(1, '', '',1,0,''));
         }
         catch(e){
-           // Assert
-           expect(e instanceof BadRequestError).toBe(true);
+            // Assert
+            expect(e instanceof BadRequestError).toBe(true);
         }
 
         
@@ -411,7 +413,7 @@ describe('charService', () => {
         
         validator.isValidId = jest.fn().mockReturnValue(true);
 
-        mockRepo.deleteById = jest.fn().mockImplementation((id: number) => {
+        mockRepo.deleteById = jest.fn().mockImplementation(() => {
             return new Promise<boolean>((resolve) => {
                 resolve(true);
             });
@@ -434,11 +436,11 @@ describe('charService', () => {
         
         validator.isValidId = jest.fn().mockReturnValue(true);
 
-        mockRepo.deleteById = jest.fn().mockImplementation((id: number)=> {
+        mockRepo.deleteById = jest.fn().mockImplementation(()=> {
             return new Promise<boolean>((resolve) => {
                 resolve(true);
             });
-        })
+        });
 
         let result = await sut.deleteById(5);
         
@@ -455,7 +457,7 @@ describe('charService', () => {
         // Act
         try{
         
-        validator.isValidId = jest.fn().mockReturnValue(false);
+            validator.isValidId = jest.fn().mockReturnValue(false);
 
         
             await sut.deleteById(-1);
@@ -476,7 +478,7 @@ describe('charService', () => {
         // Act
         try{
         
-        validator.isValidId = jest.fn().mockReturnValue(false);
+            validator.isValidId = jest.fn().mockReturnValue(false);
 
         
             await sut.deleteById(4.20);
@@ -497,7 +499,7 @@ describe('charService', () => {
         // Act
         try{
         
-        validator.isValidId = jest.fn().mockReturnValue(false);
+            validator.isValidId = jest.fn().mockReturnValue(false);
 
         
             await sut.deleteById(0);

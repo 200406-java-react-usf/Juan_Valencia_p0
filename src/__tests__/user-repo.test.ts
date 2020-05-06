@@ -9,13 +9,13 @@ jest.mock('..', () => {
         connectionPool: {
             connect: jest.fn()
         }
-    }
+    };
 });
 
 jest.mock('../util/result-set-mapper', () => {
     return {
         mapUserResultSet: jest.fn()
-    }
+    };
 });
 
 describe('userRepo', () => {
@@ -37,10 +37,10 @@ describe('userRepo', () => {
                                 account_name: 'admin'
                             }
                         ]
-                    }
+                    };
                 }), 
                 release: jest.fn()
-            }
+            };
         });
         
         (mockMapper.mapUserResultSet as jest.Mock).mockClear();
@@ -71,9 +71,9 @@ describe('userRepo', () => {
         expect.hasAssertions();
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -89,23 +89,23 @@ describe('userRepo', () => {
 
     test('should throw InternalServerError when getAll() is called but query is unsuccesful', async () => {
 
-		// Arrange
-		expect.hasAssertions();
-		(mockConnect as jest.Mock).mockImplementation( () => {
-			return {
-				query: jest.fn().mockImplementation( () => { throw new Error(); }),
-				release: jest.fn()
-			};
-		});
+        // Arrange
+        expect.hasAssertions();
+        (mockConnect as jest.Mock).mockImplementation( () => {
+            return {
+                query: jest.fn().mockImplementation( () => { throw new Error(); }),
+                release: jest.fn()
+            };
+        });
 
-		// Act
-		try {
-			await sut.getAll();
-		} catch (e) {
-			// Assert
-			expect(e instanceof InternalServerError).toBe(true);
-		}
-	});
+        // Act
+        try {
+            await sut.getAll();
+        } catch (e) {
+            // Assert
+            expect(e instanceof InternalServerError).toBe(true);
+        }
+    });
 
     test('should resolve to a User object when getById retrieves a record from data source', async () => {
 
@@ -131,9 +131,9 @@ describe('userRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -147,24 +147,24 @@ describe('userRepo', () => {
 
     test('should throw InternalServerError when getById() is called but query is unsuccesful', async () => {
 
-		// Arrange
-		expect.hasAssertions();
-		let mockUser = new User(1, 'un', 'pw', 'an');
-		(mockConnect as jest.Mock).mockImplementation( () => {
-			return {
-				query: jest.fn().mockImplementation( () => { return false; }),
-				release: jest.fn()
-			};
-		});
+        // Arrange
+        expect.hasAssertions();
+        let mockUser = new User(1, 'un', 'pw', 'an');
+        (mockConnect as jest.Mock).mockImplementation( () => {
+            return {
+                query: jest.fn().mockImplementation( () => { return false; }),
+                release: jest.fn()
+            };
+        });
 
-		// Act
-		try {
-			await sut.getById(mockUser.id);
-		} catch (e) {
-			// Assert
-			expect(e instanceof InternalServerError).toBe(true);
-		}
-	});
+        // Act
+        try {
+            await sut.getById(mockUser.id);
+        } catch (e) {
+            // Assert
+            expect(e instanceof InternalServerError).toBe(true);
+        }
+    });
 
     test('should resolve to a User object when getUserByUniqueKey retrieves a record from data source', async () => {
 
@@ -190,9 +190,9 @@ describe('userRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -228,9 +228,9 @@ describe('userRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -266,9 +266,9 @@ describe('userRepo', () => {
         let mockUser = new User(1, 'un', 'pw', 'an');
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -316,22 +316,22 @@ describe('userRepo', () => {
 
     test('should throw InternalServerError when deleteById() is called but query is unsuccesful', async () => {
 
-		// Arrange
+        // Arrange
         expect.hasAssertions();
         
-		(mockConnect as jest.Mock).mockImplementation( () => {
-			return {
-				query: jest.fn().mockImplementation( () => { throw new Error(); }),
-				release: jest.fn()
-			};
-		});
+        (mockConnect as jest.Mock).mockImplementation( () => {
+            return {
+                query: jest.fn().mockImplementation( () => { throw new Error(); }),
+                release: jest.fn()
+            };
+        });
 
-		// Act
-		try {
-			await sut.deleteById(1);
-		} catch (e) {
-			// Assert
-			expect(e instanceof InternalServerError).toBe(true);
-		}
-	});
+        // Act
+        try {
+            await sut.deleteById(1);
+        } catch (e) {
+            // Assert
+            expect(e instanceof InternalServerError).toBe(true);
+        }
+    });
 });

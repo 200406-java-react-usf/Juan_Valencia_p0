@@ -10,14 +10,14 @@ jest.mock('..', () => {
         connectionPool: {
             connect: jest.fn()
         }
-    }
+    };
 });
 
 jest.mock('../util/result-set-mapper', () => {
     return {
         mapStatResultSet: jest.fn(),
         mapUserResultSet: jest.fn()
-    }
+    };
 });
 
 
@@ -44,10 +44,10 @@ describe('statRepo', () => {
                                 account_name: 'jvalencia'
                             }
                         ]
-                    }
+                    };
                 }), 
                 release: jest.fn()
-            }
+            };
         });
 
         (mockMapper.mapStatResultSet as jest.Mock).mockClear();
@@ -78,9 +78,9 @@ describe('statRepo', () => {
         expect.hasAssertions();
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -118,9 +118,9 @@ describe('statRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] }  }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] };  }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -156,9 +156,9 @@ describe('statRepo', () => {
         
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act
@@ -195,9 +195,9 @@ describe('statRepo', () => {
         let mockUser = new User(1, 'un', 'pw', 'an');
         (mockConnect as jest.Mock).mockImplementation(() => {
             return {
-                query: jest.fn().mockImplementation(() => { return { rows: [] } }), 
+                query: jest.fn().mockImplementation(() => { return { rows: [] }; }), 
                 release: jest.fn()
-            }
+            };
         });
 
         // Act

@@ -14,7 +14,7 @@ jest.mock('../repos/user-repo', () => {
             save = jest.fn();
             update = jest.fn();
             deleteById = jest.fn();
-    }
+    };
 
 });
 describe('userService', () => {
@@ -41,7 +41,7 @@ describe('userService', () => {
                 save: jest.fn(),
                 update: jest.fn(),
                 deleteById: jest.fn()
-            }
+            };
         });
 
         // @ts-ignore
@@ -228,9 +228,9 @@ describe('userService', () => {
         // Act
         try {
 
-        validator.isPropertyOf = jest.fn().mockReturnValue(false);
-        Validator.isValidStrings = jest.fn().mockReturnValue(true);
-        Validator.isEmptyObject = jest.fn().mockReturnValue(false);
+            validator.isPropertyOf = jest.fn().mockReturnValue(false);
+            Validator.isValidStrings = jest.fn().mockReturnValue(true);
+            Validator.isEmptyObject = jest.fn().mockReturnValue(false);
 
             await sut.getUserByUniqueKey('');
         } catch (e) {
@@ -250,20 +250,21 @@ describe('userService', () => {
         // Act
         try {
 
-        validator.isPropertyOf = jest.fn().mockReturnValue(true);
-        Validator.isValidStrings = jest.fn().mockReturnValue(false);
-        Validator.isEmptyObject = jest.fn().mockReturnValue(false);
+            validator.isPropertyOf = jest.fn().mockReturnValue(true);
+            Validator.isValidStrings = jest.fn().mockReturnValue(false);
+            Validator.isEmptyObject = jest.fn().mockReturnValue(false);
 
-        mockRepo.getUserByUniqueKey = jest.fn().mockImplementation((key: string, val: string) => {
-            return new Promise<User>((resolve) => {
-                resolve(mockUsers.find(user => user[key] === val));
+            mockRepo.getUserByUniqueKey = jest.fn().mockImplementation((key: string, val: string) => {
+                return new Promise<User>((resolve) => {
+                    resolve(mockUsers.find(user => user[key] === val));
+                });
             });
-        });
         
             await sut.getUserByUniqueKey({'username': ''});
         } catch (e) {
 
             // Assert
+            
             expect(e instanceof BadRequestError).toBe(true);
         }
 
@@ -278,14 +279,14 @@ describe('userService', () => {
         // Act
         try {
 
-        validator.isPropertyOf = jest.fn().mockReturnValue(true);
-        Validator.isValidStrings = jest.fn().mockReturnValue(true);
-        Validator.isEmptyObject = jest.fn().mockReturnValue(true);
-        mockRepo.getUserByUniqueKey = jest.fn().mockImplementation((key: string, val: string) => {
-            return new Promise<User>((resolve) => {
-                resolve({} as User);
+            validator.isPropertyOf = jest.fn().mockReturnValue(true);
+            Validator.isValidStrings = jest.fn().mockReturnValue(true);
+            Validator.isEmptyObject = jest.fn().mockReturnValue(true);
+            mockRepo.getUserByUniqueKey = jest.fn().mockImplementation(() => {
+                return new Promise<User>((resolve) => {
+                    resolve({} as User);
+                });
             });
-        });
             await sut.getUserByUniqueKey({'username': 'x'});
         } catch (e) {
 
@@ -329,12 +330,12 @@ describe('userService', () => {
             Validator.isValidStrings = jest.fn().mockReturnValue(false);
             
 
-                await sut.authenticateUser('', '');
-            } catch (e) {
+            await sut.authenticateUser('', '');
+        } catch (e) {
     
-                // Assert
-                expect(e instanceof BadRequestError).toBe(true);
-            }
+            // Assert
+            expect(e instanceof BadRequestError).toBe(true);
+        }
 
     });
 
@@ -347,17 +348,17 @@ describe('userService', () => {
         try {
             
             Validator.isValidStrings = jest.fn().mockReturnValue(true);
-            mockRepo.getUserByCredentials = jest.fn().mockImplementation((un: string, pw: string) => {
-                            return new Promise<User>((resolve) => {
-                                resolve({} as User);
-                            });
-                        });
-                await sut.authenticateUser('aanderson','password');
-            } catch (e) {
+            mockRepo.getUserByCredentials = jest.fn().mockImplementation(() => {
+                return new Promise<User>((resolve) => {
+                    resolve({} as User);
+                });
+            });
+            await sut.authenticateUser('aanderson','password');
+        } catch (e) {
     
-                // Assert
-                expect(e instanceof AuthenticationError).toBe(true);
-            }
+            // Assert
+            expect(e instanceof AuthenticationError).toBe(true);
+        }
 
     });
 
@@ -367,7 +368,7 @@ describe('userService', () => {
         expect.assertions(3);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(true);
 
         mockRepo.save = jest.fn().mockImplementation((user: User) => {
@@ -395,23 +396,19 @@ describe('userService', () => {
         expect.assertions(1);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
-        validator.isValidObject = jest.fn().mockReturnValue(true);
-
-        mockRepo.save = jest.fn().mockImplementation((user: User) => {
-            return new Promise<User>((resolve) => {
-                resolve(user);
-            });
-        });
+        
 
 
 
         // Act
         try{
+            validator.isValidObject = jest.fn().mockReturnValue(true);
+
+
             sut.isUsernameAvailable = jest.fn().mockReturnValue(false);
             sut.isAccountAvailable = jest.fn().mockReturnValue(true);
 
-            let result = await sut.addNewUser(new User(1, 'aanderson', 'password', 'Alice'));
+            await sut.addNewUser(new User(1, 'aanderson', 'password', 'Alice'));
         }
         catch(e){
             expect(e instanceof ResourcePersistenceError).toBe(true);
@@ -428,7 +425,7 @@ describe('userService', () => {
         expect.assertions(1);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(true);
 
         mockRepo.save = jest.fn().mockImplementation((user: User) => {
@@ -444,7 +441,7 @@ describe('userService', () => {
             sut.isUsernameAvailable = jest.fn().mockReturnValue(true);
             sut.isAccountAvailable = jest.fn().mockReturnValue(false);
             
-            let result = await sut.addNewUser(new User(1, 'xtx', 'password', 'Alice'));
+            await sut.addNewUser(new User(1, 'xtx', 'password', 'Alice'));
         }
         catch(e){
             expect(e instanceof ResourcePersistenceError).toBe(true);
@@ -461,7 +458,7 @@ describe('userService', () => {
         expect.assertions(1);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(true);
 
         mockRepo.save = jest.fn().mockImplementation((user: User) => {
@@ -475,7 +472,7 @@ describe('userService', () => {
         try{
 
         
-        let result = await sut.addNewUser(new User(1, '', 'x', 'x'));
+            await sut.addNewUser(new User(1, '', 'x', 'x'));
         }
         // Assert
         catch(e){
@@ -489,7 +486,7 @@ describe('userService', () => {
         expect.assertions(1);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(true);
 
         mockRepo.save = jest.fn().mockImplementation((user: User) => {
@@ -502,7 +499,7 @@ describe('userService', () => {
 
         // Act
         try{
-        let result = await sut.addNewUser(new User(1, 'x', 'x', ''));
+            await sut.addNewUser(new User(1, 'x', 'x', ''));
         }
         // Assert
         catch(e){
@@ -516,7 +513,7 @@ describe('userService', () => {
         expect.assertions(1);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(false);
 
         mockRepo.save = jest.fn().mockImplementation((user: User) => {
@@ -529,7 +526,7 @@ describe('userService', () => {
 
         // Act
         try{
-        let result = await sut.addNewUser(new User(0, 'x', 'x', ''));
+            await sut.addNewUser(new User(0, 'x', 'x', ''));
         }
         // Assert
         catch(e){
@@ -541,9 +538,9 @@ describe('userService', () => {
 
         // Arrange
         expect.assertions(1);
-        let updatedUser = {'username':'aanderson', 'password':'password', 'account_name':'Alice'}
+        let updatedUser = {'username':'aanderson', 'password':'password', 'account_name':'Alice'};
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(false);
         validator.isPropertyOf = jest.fn().mockReturnValue(true);
 
@@ -569,7 +566,7 @@ describe('userService', () => {
         expect.assertions(1);
         
 
-        //Object.keys = jest.fn().mockImplementation(() => { return ['id']});
+
         validator.isValidObject = jest.fn().mockReturnValue(true);
         validator.isPropertyOf = jest.fn().mockReturnValue(true);
 
@@ -584,8 +581,8 @@ describe('userService', () => {
             await sut.updateUser(new User(1, '', '', ''));
         }
         catch(e){
-           // Assert
-           expect(e instanceof BadRequestError).toBe(true);
+            // Assert
+            expect(e instanceof BadRequestError).toBe(true);
         }
 
         
@@ -613,8 +610,8 @@ describe('userService', () => {
             await sut.updateUser(new User(1, '', '', ''));
         }
         catch(e){
-           // Assert
-           expect(e instanceof BadRequestError).toBe(true);
+            // Assert
+            expect(e instanceof BadRequestError).toBe(true);
         }
 
         
@@ -634,11 +631,11 @@ describe('userService', () => {
             return new Promise<User>((resolve) => {
                 resolve(mockUsers[id - 1]);
             });
-        })
+        });
 
         validator.isEmptyObject = jest.fn().mockReturnValue(true);
 
-        mockRepo.deleteById = jest.fn().mockImplementation((id: number) => {
+        mockRepo.deleteById = jest.fn().mockImplementation(() => {
             return new Promise<boolean>((resolve) => {
                 resolve(true);
             });
@@ -665,11 +662,11 @@ describe('userService', () => {
             return new Promise<User>((resolve) => {
                 resolve(mockUsers[id - 1]);
             });
-        })
+        });
 
         validator.isEmptyObject = jest.fn().mockReturnValue(true);
 
-        mockRepo.deleteById = jest.fn().mockImplementation((id: number) => {
+        mockRepo.deleteById = jest.fn().mockImplementation(() => {
             return new Promise<boolean>((resolve) => {
                 resolve(true);
             });
@@ -695,21 +692,21 @@ describe('userService', () => {
         // Act
         try{
         
-        validator.isValidId = jest.fn().mockReturnValue(true);
+            validator.isValidId = jest.fn().mockReturnValue(true);
 
-        mockRepo.getById = jest.fn().mockImplementation((id: number)=> {
-            return new Promise<User>((resolve) => {
-                resolve({}as User);
+            mockRepo.getById = jest.fn().mockImplementation(()=> {
+                return new Promise<User>((resolve) => {
+                    resolve({}as User);
+                });
             });
-        })
 
-        validator.isEmptyObject = jest.fn().mockReturnValue(false);
+            validator.isEmptyObject = jest.fn().mockReturnValue(false);
 
-        // mockRepo.deleteById = jest.fn().mockImplementation((id: number) => {
-        //     return new Promise<boolean>((resolve) => {
-        //         resolve(true);
-        //     });
-        // });
+            // mockRepo.deleteById = jest.fn().mockImplementation((id: number) => {
+            //     return new Promise<boolean>((resolve) => {
+            //         resolve(true);
+            //     });
+            // });
             await sut.deleteById(5);
         }
         catch (e) {
